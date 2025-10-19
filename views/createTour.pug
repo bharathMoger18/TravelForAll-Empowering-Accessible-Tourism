@@ -1,0 +1,98 @@
+extends base
+
+block content
+  main.main
+    .admin-view
+      h2.heading-secondary.ma-bt-md Create a New Tour
+
+      form#tourCreateForm.form.form-create-tour(method='POST', enctype='multipart/form-data')
+        .form__group
+          label.form__label(for='name') Name
+          input#name.form__input(type='text', name='name', required)
+
+        .form__group
+          label.form__label(for='duration') Duration (days)
+          input#duration.form__input(type='number', name='duration', required)
+
+        .form__group
+          label.form__label(for='maxGroupSize') Max Group Size
+          input#maxGroupSize.form__input(type='number', name='maxGroupSize', required)
+
+        .form__group
+          label.form__label(for='difficulty') Difficulty
+          select#difficulty.form__input(name='difficulty', required)
+            option(value='easy') Easy
+            option(value='medium') Medium
+            option(value='difficult') Difficult
+
+        .form__group
+          label.form__label(for='ratingsAverage') Ratings Average
+          input#ratingsAverage.form__input(type='number', name='ratingsAverage', value='4.5')
+
+        .form__group
+          label.form__label(for='ratingsQuantity') Ratings Quantity
+          input#ratingsQuantity.form__input(type='number', name='ratingsQuantity', value='0')
+
+        .form__group
+          label.form__label(for='price') Price
+          input#price.form__input(type='number', name='price', required)
+
+        .form__group
+          label.form__label(for='priceDiscount') Price Discount
+          input#priceDiscount.form__input(type='number', name='priceDiscount')
+
+        .form__group
+          label.form__label(for='summary') Summary
+          textarea#summary.form__input(name='summary', rows='2', required)
+
+        .form__group
+          label.form__label(for='description') Description
+          textarea#description.form__input(name='description', rows='4')
+
+        .form__group
+          label.form__label(for='coordinates') Coordinates (lng,lat)
+          input#coordinates.form__input(type='text', name='coordinates', required)
+
+        .form__group
+          label.form__label(for='address') Address
+          input#address.form__input(type='text', name='address')
+
+        .form__group
+          label.form__label(for='locationDescription') Location Description
+          input#locationDescription.form__input(type='text', name='locationDescription')
+
+        // ✅ Tour Lead Dropdown — preselected first user!
+        .form__group
+          label.form__label(for='tourLead') Tour Lead
+          select#tourLead.form__input(name='tourLead', required)
+            each user, idx in tourLeads
+              if idx === 0
+                option(value=user._id selected)= user.name
+              else
+                option(value=user._id)= user.name
+
+        // ✅ Tour Guides
+        .form__group
+          label.form__label Tour Guides
+          .checkbox-group
+            each user in tourGuides
+              label.checkbox-label
+                input(type='checkbox', name='tourGuides', value=user._id)
+                | #{user.name}
+
+        .form__group
+          label.form__label Start Dates
+          input.form__input.startDate(type='date', name='startDates[]')
+          input.form__input.startDate(type='date', name='startDates[]')
+          input.form__input.startDate(type='date', name='startDates[]')
+
+        .form__group
+          label.form__label(for='imageCover') Cover Image
+          input#imageCover(type='file', name='imageCover', accept='image/*', required)
+
+        .form__group
+          label.form__label(for='images') Tour Images
+          input#images(type='file', name='images', multiple, accept='image/*')
+
+        .form__group.right
+          button.btn.btn--green(type='submit') Create Tour

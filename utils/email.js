@@ -7,7 +7,7 @@ module.exports = class Email {
     this.to = user.email;
     this.firstName = user.name.split(' ')[0];
     this.url = url;
-    this.from = `Jonas Schmedtmann <${process.env.EMAIL_FROM}>`;
+    this.from = `Travel For All <${process.env.EMAIL_FROM}>`;
   }
 
   newTransport() {
@@ -25,6 +25,7 @@ module.exports = class Email {
     return nodemailer.createTransport({
       host: process.env.EMAIL_HOST,
       port: process.env.EMAIL_PORT,
+      secure: true, // ✅ Add this line for port 465 (SSL)
       auth: {
         user: process.env.EMAIL_USERNAME,
         pass: process.env.EMAIL_PASSWORD
@@ -33,12 +34,14 @@ module.exports = class Email {
   }
 
   // Send the actual email
-  async send(template, subject) {
+  // Send the actual email
+  async send(template, subject, extraData = {}) {
     // 1) Render HTML based on a pug template
     const html = pug.renderFile(`${__dirname}/../views/email/${template}.pug`, {
       firstName: this.firstName,
       url: this.url,
-      subject
+      subject,
+      ...extraData // 🔥 pass extra data like { tour }
     });
 
     // 2) Define email options
@@ -52,6 +55,14 @@ module.exports = class Email {
 
     // 3) Create a transport and send email
     await this.newTransport().sendMail(mailOptions);
+  }
+
+  async sendBookingConfirmation(tour) {
+    await this.send(
+      'bookingConfirmation',
+      `Your booking for ${tour.name} is confirmed!`,
+      { tour } // 👈 pass the tour object here
+    );
   }
 
   async sendWelcome() {

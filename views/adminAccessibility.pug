@@ -1,0 +1,33 @@
+extends base
+
+block content
+  main.main
+    .user-view
+      .user-view__menu
+        // Sidebar can go here
+
+      .user-view__content
+        .user-view__form-container
+          h2.heading-secondary.ma-bt-md.text-center Manage Accessibility Requests
+
+          if requests.length === 0
+            p.text-center.mt-md No accessibility requests found.
+          else
+            table.table.table--styled.mt-lg
+              thead
+                tr
+                  th.text-left Tour
+                  th.text-left User
+                  th.text-center Wheelchair ♿
+                  th.text-center Assistant 👥
+                  th.text-center Sign Language 🧏‍♂️
+                  th.text-center Date
+              tbody
+                each req in requests
+                  tr
+                    td.font-bold= req.tour ? req.tour.name : 'Tour Deleted'
+                    td.font-medium= req.user ? req.user.name : 'User Deleted'
+                    td.text-center(style={ backgroundColor: req.wheelchair ? '#e6ffe6' : '#ffe6e6', color: req.wheelchair ? 'green' : 'red' })= req.wheelchair ? '✅' : '❌'
+                    td.text-center(style={ backgroundColor: req.personalAssistance ? '#e6ffe6' : '#ffe6e6', color: req.personalAssistance ? 'green' : 'red' })= req.personalAssistance ? '✅' : '❌'
+                    td.text-center(style={ backgroundColor: req.signLanguageSupport ? '#e6ffe6' : '#ffe6e6', color: req.signLanguageSupport ? 'green' : 'red' })= req.signLanguageSupport ? '✅' : '❌'
+                    td.text-center= new Date(req.createdAt).toLocaleString()

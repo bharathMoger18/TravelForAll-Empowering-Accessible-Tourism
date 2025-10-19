@@ -1,0 +1,24 @@
+extends base
+
+block content
+  main.main
+    .admin-view
+      h2.heading-secondary.ma-bt-md All Tours (Admin)
+
+      .card-container
+        each tour in tours
+          .card
+            .card__header
+              .card__picture
+                img.card__picture-img(src=`${tour.imageCover}`, alt=`${tour.name}`)
+            h3.heading-tertirary= tour.name
+
+            .card__details
+              p Difficulty: #{tour.difficulty}
+              p Duration: #{tour.duration} days
+              p Group Size: #{tour.maxGroupSize}
+              p Price: $#{tour.price}
+              p Summary: #{tour.summary}
+
+            .card__footer
+              a.btn.btn--green(href=`/admin/create-tour`) Create New Tour

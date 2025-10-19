@@ -110,6 +110,19 @@ body {
   background-color: #eb4d4b;
 }
 
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.checkbox-label {
+  font-weight: normal;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .heading-secondary {
   font-size: 2.25rem;
   text-transform: uppercase;
@@ -336,82 +349,77 @@ body {
 
 .section-header {
   position: relative;
-  height: 38vw;
-  clip-path: polygon(
-    0 0,
-    100% 0,
-    100% calc(100% - var(--section-rotate)),
-    0 100%
-  );
-  -webkit-clip-path: polygon(
-    0 0,
-    100% 0,
-    100% calc(100% - var(--section-rotate)),
-    0 100%
-  );
+  height: 90vh;
+  overflow: hidden;
 }
 
 .header__hero {
-  height: 100%;
-}
-
-.header__hero-img {
-  -o-object-fit: cover;
-  object-fit: cover;
-  height: 100%;
+  position: relative;
   width: 100%;
-  -o-object-position: 50% 25%;
-  object-position: 50% 25%;
+  height: 100%;
 }
 
 .header__hero-overlay {
   position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  background-image: -webkit-gradient(
-    linear,
-    left top,
-    right bottom,
-    from(#7dd56f),
-    to(#28b487)
+  background: linear-gradient(
+    to right bottom,
+    rgba(126, 213, 111, 0.8),
+    rgba(40, 180, 131, 0.8)
   );
-  background-image: linear-gradient(to right bottom, #7dd56f, #28b487);
-  opacity: 0.85;
+  z-index: 1;
+}
+
+.header__hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .heading-box {
   position: absolute;
-  bottom: 13vw;
+  top: 50%;
   left: 50%;
-  top: 35%;
-  -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
+  color: #fff;
+  text-align: center;
+  z-index: 2;
 }
-.heading-box__group {
-  color: #f7f7f7;
-  margin-top: 3rem;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-}
-.heading-box__detail {
-  font-size: 1.5rem;
-  font-weight: 700;
+
+.heading-primary {
+  font-size: 4rem;
   text-transform: uppercase;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  text-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.15);
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
 }
+
+.heading-box__group {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.heading-box__detail {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.heading-box__icon {
+  width: 2rem;
+  height: 2rem;
+  fill: #fff;
+}
+
+.heading-box__text {
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
 .heading-box__detail svg {
   margin-right: 0.8rem;
 }
@@ -575,6 +583,7 @@ body {
 .section-reviews {
   margin-top: calc(0px - var(--section-rotate));
   padding: calc(5rem + var(--section-rotate)) 0;
+  padding-left: 1rem;
   position: relative;
   z-index: 1000;
   background: -webkit-gradient(
@@ -600,68 +609,71 @@ body {
 }
 
 .reviews {
-  padding: 5rem 0;
-  display: grid;
-  grid-column-gap: 6rem;
-  grid-auto-flow: column;
-  overflow-x: scroll;
-  -ms-scroll-snap-type: x mandatory;
-  scroll-snap-type: x mandatory;
-}
-.reviews__card {
-  width: 30rem;
-  padding: 4rem;
-  background-color: #f7f7f7;
-  border-radius: 3px;
-  -webkit-box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.15);
-  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.15);
-  scroll-snap-align: center;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+  flex-direction: row;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory; /* optional, but looks good */
+  gap: 4rem; /* adjust spacing between cards */
+  padding: 2rem 0;
+  -ms-overflow-style: none; /* IE & Edge */
+  scrollbar-width: none; /* Firefox */
 }
+
+.reviews::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for Chrome/Safari */
+}
+
+.reviews__card {
+  flex: 0 0 auto;
+  width: 30rem; /* match your card size scale */
+  scroll-snap-align: start;
+  background-color: #fff;
+  border-radius: 3px;
+  padding: 3rem;
+  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.15);
+  transition: all 0.3s;
+}
+
+.reviews__card:hover {
+  transform: translateY(-1rem) scale(1.02);
+  box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.2);
+}
+
 .reviews:before,
 .reviews:after {
   content: '';
   width: 2rem;
 }
+/* Ensure avatar and content are styled nicely */
 .reviews__avatar {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
   margin-bottom: 2rem;
 }
+
 .reviews__avatar-img {
+  width: 4.5rem;
   height: 4.5rem;
   border-radius: 50%;
   margin-right: 1.5rem;
+  object-fit: cover;
 }
+
 .reviews__user {
-  font-size: 1.5rem;
   font-weight: 700;
+  font-size: 1.6rem;
   text-transform: uppercase;
 }
+
 .reviews__text {
   font-size: 1.5rem;
-  margin-bottom: 2rem;
   font-style: italic;
-  font-weight: 400;
+  margin-bottom: 2rem;
 }
+
 .reviews__rating {
-  margin-top: auto;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
+  font-size: 1.6rem;
+  color: var(--color-primary);
 }
 .reviews__star {
   height: 2rem;
@@ -1322,4 +1334,454 @@ body {
   box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
   -webkit-transform: translateY(-2px);
   transform: translateY(-2px);
+}
+
+#accessibility-form {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+#accessibility-form h3 {
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+#accessibility-form .form__group {
+  margin-bottom: 0.8rem;
+}
+
+#accessibility-form button {
+  align-self: flex-start;
+}
+
+.table--striped tbody tr:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+
+.table--hover tbody tr:hover {
+  background-color: #e6f7ff;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.mt-md {
+  margin-top: 2rem;
+}
+
+.mt-lg {
+  margin-top: 3rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.table--styled {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table--styled th,
+.table--styled td {
+  padding: 1rem;
+  border: 1px solid #ddd;
+}
+
+.table--styled tr:hover {
+  background-color: #f1faff;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.font-bold {
+  font-weight: 600;
+}
+
+.mt-lg {
+  margin-top: 3rem;
+}
+
+.table--styled {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table--styled th,
+.table--styled td {
+  padding: 1rem;
+  border: 1px solid #ddd;
+}
+
+.table--styled tr:hover {
+  background-color: #f1faff;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.font-bold {
+  font-weight: 600;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.mt-lg {
+  margin-top: 3rem;
+}
+
+.mt-md {
+  margin-top: 1.5rem;
+}
+
+.seats--red {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.seats--orange {
+  color: #f39c12;
+  font-weight: bold;
+}
+
+.seats--green {
+  color: #2ecc71;
+}
+.admin-dashboard {
+  max-width: 600px;
+  margin: auto;
+  text-align: center;
+  padding: 2rem;
+}
+
+.dashboard-options a {
+  display: block;
+  margin: 1rem 0;
+  padding: 1rem 1.5rem;
+  font-size: 1.2rem;
+  text-decoration: none;
+}
+
+.alert--success {
+  background-color: #e6ffed;
+  color: #2e7d32;
+  padding: 1rem 1.5rem;
+  border-radius: 5px;
+  font-weight: 600;
+}
+
+.section-admin {
+  padding: 5rem 0;
+  background-color: #f7f7f7;
+}
+
+.admin-container {
+  max-width: 600px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 3rem;
+  border-radius: 5px;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1);
+}
+.form--delete {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #f7f7f7;
+  border-radius: 8px;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.05);
+}
+
+.section-dashboard {
+  padding: 2rem;
+  max-width: 1100px;
+  margin: auto;
+}
+
+.dashboard-header {
+  margin-bottom: 2rem;
+}
+
+.stats-grid {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.stat-box {
+  flex: 1;
+  padding: 1.5rem;
+  border-radius: 10px;
+  background-color: #f5f5f5;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.stat-box h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+  color: #444;
+}
+
+.stat-box p {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #2c7be5;
+}
+
+.chart-title {
+  margin: 2rem 0 1rem;
+}
+
+.card--billing {
+  padding: 2rem;
+  border-radius: 8px;
+  background-color: #f7f9fc;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.text-green {
+  color: #28b485;
+}
+
+.section-billing {
+  padding: 4rem 2rem;
+  background-color: #fff;
+  font-size: 1.3rem; /* Increased for better readability */
+  line-height: 1.8;
+}
+
+.billing-container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: #f9f9f9;
+  padding: 3rem;
+  border-radius: 8px;
+  box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.1);
+}
+
+.section-billing h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: #333;
+}
+
+.centered-text {
+  text-align: center;
+}
+
+.summary-card {
+  display: flex;
+  justify-content: space-between;
+  background-color: #e8f5e9;
+  border: 1px solid #c8e6c9;
+  border-radius: 6px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.summary-item {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #2e7d32;
+}
+.billing-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 2rem;
+}
+
+.billing-table th,
+.billing-table td {
+  padding: 1.2rem;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  font-size: 1.2rem; /* Increased from 0.95rem */
+  color: #444;
+}
+
+.billing-table th {
+  background-color: #e6e6e6;
+  font-weight: bold;
+}
+
+.no-bookings {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.no-data-img {
+  height: 180px;
+  margin-bottom: 1rem;
+}
+
+.no-data-msg {
+  font-size: 1rem;
+  color: #666;
+}
+
+.billing-note {
+  font-size: 0.9rem;
+  color: #777;
+  margin-top: 1rem;
+}
+
+.no-billings {
+  text-align: center;
+  font-size: 1.4rem;
+  color: #888;
+  padding: 2rem 0;
+}
+
+.card--review,
+.card--submitted {
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
+}
+
+.section-grid,
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+/* ===================================================
+   ✅ Minimal Responsive Enhancements (Safe + Non-breaking)
+   Keeps tour.pug layout intact
+   =================================================== */
+
+@media only screen and (max-width: 992px) {
+  .header,
+  .nav,
+  .user-view,
+  .card-container,
+  .overview-box,
+  .section-cta,
+  .section-header {
+    flex-direction: column !important;
+    align-items: center;
+  }
+
+  .header {
+    padding: 2rem 1.5rem;
+    gap: 1.5rem;
+  }
+
+  .header__logo {
+    margin-bottom: 1rem;
+  }
+
+  .nav__el {
+    display: block;
+    text-align: center;
+    margin: 0.5rem 0;
+  }
+
+  .overview-box {
+    padding: 2rem 1rem;
+  }
+
+  .overview-box__group {
+    margin-bottom: 2rem;
+  }
+
+  .cta {
+    padding: 3rem 1.5rem;
+    grid-template-columns: 1fr !important;
+    text-align: center;
+  }
+
+  .cta__img {
+    display: none;
+  }
+
+  .section-description {
+    padding: 2rem 1.5rem;
+  }
+
+  .form__group {
+    margin-bottom: 2rem;
+  }
+
+  .card__footer {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .reviews {
+    padding: 2rem 1rem;
+  }
+
+  .picture-box__img {
+    width: 100%;
+    height: auto;
+  }
+
+  .table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
+
+@media only screen and (max-width: 576px) {
+  html {
+    font-size: 52.5%;
+  }
+
+  .btn {
+    padding: 1rem 2rem;
+    font-size: 1.4rem;
+  }
+
+  .heading-primary {
+    font-size: 3rem;
+    text-align: center;
+  }
+
+  .heading-secondary {
+    font-size: 2.2rem;
+    text-align: center;
+  }
+
+  .heading-tertirary {
+    font-size: 1.8rem;
+    text-align: center;
+  }
+
+  .form__input,
+  .form__label {
+    width: 100%;
+  }
+
+  .form {
+    padding: 1rem;
+  }
+
+  .nav__user-img {
+    height: 3rem;
+    width: 3rem;
+  }
 }

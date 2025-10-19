@@ -1,0 +1,23 @@
+extends baseEmail
+
+block content
+  p Hi #{firstName},
+  p Thank you for booking the tour: "#{tour.name}"!
+  p Tour details:
+  ul
+    li Duration: #{tour.duration} days
+    li Price: $#{tour.price}
+    li Max Group Size: #{tour.maxGroupSize}
+    li Start Location: #{tour.startLocation.description || 'N/A'}
+  p We'll see you soon on your adventure! 🌍✨
+  p You can view your bookings here:
+  table.btn.btn-primary(role='presentation', border='0', cellpadding='0', cellspacing='0')
+    tbody
+      tr
+        td(align='left')
+          table(role='presentation', border='0', cellpadding='0', cellspacing='0')
+            tbody
+              tr
+                td
+                  a(href=`${url}`, target='_blank') My Tours
+  p - Team TravelForAll

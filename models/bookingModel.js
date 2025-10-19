@@ -13,7 +13,12 @@ const bookingSchema = new mongoose.Schema({
   },
   price: {
     type: Number,
-    require: [true, 'Booking must have a price.']
+    required: [true, 'Booking must have a price.']
+  },
+  numTravellers: {
+    type: Number,
+    required: true,
+    min: [1, 'At least 1 traveller is required']
   },
   createdAt: {
     type: Date,
@@ -34,5 +39,4 @@ bookingSchema.pre(/^find/, function(next) {
 });
 
 const Booking = mongoose.model('Booking', bookingSchema);
-
 module.exports = Booking;

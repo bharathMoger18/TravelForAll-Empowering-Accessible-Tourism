@@ -1,0 +1,35 @@
+extends base
+
+block content
+  main.main
+    section.section-billing
+      .billing-container
+        h2.heading-secondary.centered-text Billing & Payment History
+
+        if bookings.length
+          .summary-card
+            .summary-item
+              span.label Total Spent
+              span.value $#{totalSpent}
+
+          table.billing-table
+            thead
+              tr
+                th Tour
+                th Travellers
+                th Price
+                th Booked On
+            tbody
+              each booking in bookings
+                tr
+                  td= booking.tour.name
+                  td= booking.numTravellers
+                  td $#{booking.price}
+                  td= new Date(booking.createdAt).toLocaleDateString()
+        else
+          .no-bookings
+            img(src="/img/no-data.svg", alt="No bookings", class="no-data-img")
+            p.no-data-msg You haven’t made any bookings yet.
+
+        p.billing-note.centered-text
+          | 🧾 Your invoices are emailed automatically after each successful booking.

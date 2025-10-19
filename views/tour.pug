@@ -5,7 +5,6 @@ block append head
   script(src='https://api.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.js')
   link(href='https://api.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.css' rel='stylesheet')
 
-
 mixin overviewBox(label, text, icon)
   .overview-box__detail
     svg.overview-box__icon
@@ -17,7 +16,13 @@ block content
   section.section-header
     .header__hero
       .header__hero-overlay &nbsp;
-      img.header__hero-img(src=`/img/tours/${tour.imageCover}`, alt=`${tour.name}`)
+
+      - const heroImg = tour.imageCover && tour.imageCover.startsWith('http') ? tour.imageCover : `/img/tours/${tour.imageCover || 'default.jpg'}`
+
+      img.header__hero-img(
+        src=heroImg,
+        alt=`${tour.name}`
+      )
 
     .heading-box
       h1.heading-primary
@@ -30,63 +35,124 @@ block content
         .heading-box__detail
           svg.heading-box__icon
             use(xlink:href='/img/icons.svg#icon-map-pin')
-          span.heading-box__text= tour.startLocation.description
+          if tour.startLocation && tour.startLocation.description
+            span.heading-box__text= tour.startLocation.description
+          else
+            span.heading-box__text No location
 
   section.section-description
     .overview-box
       div
         .overview-box__group
           h2.heading-secondary.ma-bt-lg Quick facts
-
-          - const date = tour.startDates[0].toLocaleString('en-us', {month: 'long', year: 'numeric'})
+          - const date = tour.startDates && tour.startDates.length ? new Date(tour.startDates[0]).toLocaleString('en-us', { month: 'long', year: 'numeric' }) : 'No dates'
           +overviewBox('Next date', date, 'calendar')
           +overviewBox('Difficulty', tour.difficulty, 'trending-up')
-          +overviewBox('Participants', `${tour.maxGroupSize} people`, 'user')
-          +overviewBox('Rating', `${tour.ratingsAverage} / 5`, 'star')
+          +overviewBox('Participants', `${tour.maxGroupSize || 0} people`, 'user')
+          +overviewBox('Rating', `${tour.ratingsAverage || 0} / 5`, 'star')
 
         .overview-box__group
           h2.heading-secondary.ma-bt-lg Your tour guides
 
-          each guide in tour.guides
+          // ✅ Lead guide
+          if tour.tourLead
             .overview-box__detail
-              img.overview-box__img(src=`/img/users/${guide.photo}`, alt=`${guide.name}`)
+              img.overview-box__img(src=`/img/users/${tour.tourLead.photo || 'default.jpg'}`, alt=`${tour.tourLead.name}`)
+              span.overview-box__label Lead guide
+              span.overview-box__text= tour.tourLead.name
 
-              - if (guide.role === 'lead-guide')
-                span.overview-box__label Lead guide
-              - if (guide.role === 'guide')
+          // ✅ Other guides
+          if tour.tourGuides && tour.tourGuides.length
+            each guide in tour.tourGuides
+              .overview-box__detail
+                img.overview-box__img(src=`/img/users/${guide.photo || 'default.jpg'}`, alt=`${guide.name}`)
                 span.overview-box__label Tour guide
-              span.overview-box__text= guide.name
+                span.overview-box__text= guide.name
+
+          // ✅ Fallback if no lead or guides
+          if !tour.tourLead && (!tour.tourGuides || !tour.tourGuides.length)
+            p No guides assigned.
 
     .description-box
       h2.heading-secondary.ma-bt-lg= `About ${tour.name} tour`
-      - const parapraphs = tour.description.split('\n');
-      each p in parapraphs
+      - const paragraphs = tour.description ? tour.description.split('\n') : []
+      each p in paragraphs
         p.description__text= p
 
   section.section-pictures
-    each img, i in tour.images
-      .picture-box
-        img.picture-box__img(src=`/img/tours/${img}`, alt=`The Park Camper Tour ${i + 1}`, class=`picture-box__img--${i + 1}`)
+    if tour.images && tour.images.length
+      each img, i in tour.images
+        .picture-box
+          - const imgSrc = img && img.startsWith('http') ? img : `/img/tours/${img}`
+          img.picture-box__img(
+            src=imgSrc,
+            alt=`${tour.name} Image ${i + 1}`,
+            class=`picture-box__img--${i + 1}`
+          )
 
   section.section-map
-    #map(data-locations=`${JSON.stringify(tour.locations)}`)
+    #map(data-locations=`${JSON.stringify(tour.locations || [])}`)
 
   section.section-reviews
     .reviews
-      each review in tour.reviews
-        +reviewCard(review)
+      if tour.reviews && tour.reviews.length
+        each review in tour.reviews
+          +reviewCard(review)
+      else
+        p No reviews available yet.
 
   section.section-cta
     .cta
       .cta__img.cta__img--logo
         img(src='/img/logo-white.png', alt='Natours logo')
-      img.cta__img.cta__img--1(src=`/img/tours/${tour.images[1]}`, alt='Tour picture')
-      img.cta__img.cta__img--2(src=`/img/tours/${tour.images[2]}`, alt='Tour picture')
+
+      if tour.images && tour.images.length > 1
+        - const ctaImg1 = tour.images[1] && tour.images[1].startsWith('http') ? tour.images[1] : `/img/tours/${tour.images[1]}`
+        img.cta__img.cta__img--1(
+          src=ctaImg1,
+          alt='Tour picture'
+        )
+
+      if tour.images && tour.images.length > 2
+        - const ctaImg2 = tour.images[2] && tour.images[2].startsWith('http') ? tour.images[2] : `/img/tours/${tour.images[2]}`
+        img.cta__img.cta__img--2(
+          src=ctaImg2,
+          alt='Tour picture'
+        )
+
       .cta__content
         h2.heading-secondary What are you waiting for?
         p.cta__text= `${tour.duration} days. 1 adventure. Infinite memories. Make it yours today!`
-        
+
         if user
-          button.btn.btn--green.span-all-rows#book-tour(data-tour-id=`${tour.id}`) Book tour now!
+          input(type='hidden', id='realTourId', value=`${tour._id}`)
+
+          .form__group
+            label.form__label(for='numTravellers') Number of Travellers
+            input#numTravellers.form__input(
+              type='number',
+              min='1',
+              max=tour.maxGroupSize,
+              value='1',
+              required
+            )
+
+          button.btn.btn--green.span-all-rows#book-tour(data-tour-id=`${tour._id}`) Book tour now!
+
+          form#accessibility-form
+            h3.heading-tertirary Accessibility Service Request
+            .form__group
+              label.form__label(for='wheelchair')
+                input(type='checkbox', name='wheelchair', id='wheelchair')
+                |  Wheelchair
+            .form__group
+              label.form__label(for='personalAssistance')
+                input(type='checkbox', name='personalAssistance', id='personalAssistance')
+                |  Personal Assistance
+            .form__group
+              label.form__label(for='signLanguageSupport')
+                input(type='checkbox', name='signLanguageSupport', id='signLanguageSupport')
+                |  Sign Language Support
+            button.btn.btn--green(type='submit') Submit Accessibility Request
         else
           a.btn.btn--green.span-all-rows(href='/login') Log in to book tour
