@@ -170,10 +170,11 @@
     "photo": "user-19.jpg",
     "password": "$2a$12$11JElTatQlAFo1Obw/dwd..vuVmQyYS7MT14pkl3lRvVPjGA00G8O"
   },
+
   {
-    "_id": "5c8a24a02f8fb814b56fa193",
-    "name": "Bhanu",
-    "email": "bhanu@gmail.com",
+    "_id": "5c8a24a02f8fb814b56fa194",
+    "name": "admin",
+    "email": "admin@gmail.com",
     "role": "admin",
     "active": true,
     "photo": "user-20.jpg",

@@ -1,3 +1,18 @@
 node_modules/
 *.env
 .cache/
+# Environment secrets
+.env
+.env.*
+!.env.example
+config.env
+
+# Dependencies and local caches
+node_modules/
+.cache/
+
+# Generated invoices and temporary files
+tmp/
+
+# Generated Parcel source map
+public/js/bundle.js.map

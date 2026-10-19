@@ -1,0 +1,53 @@
+extends base
+
+block content
+  main.main
+    .section-header
+      h2.heading-secondary.mb-sm My Reviews
+
+    if unreviewedTours.length
+      .section-review.mt-sm
+        h3.heading-tertirary.mb-xs Review Your Booked Tours
+        each tour in unreviewedTours
+          if tour && tour._id
+            .card.card--review
+              h4= tour.name
+              form.review-form
+                input(type='hidden', name='tourId', value=tour._id)
+                .form__group
+                  label.form__label(for='rating') Rating
+                  select.form__input(name='rating')
+                    option(value='5') ⭐⭐⭐⭐⭐ Excellent
+                    option(value='4') ⭐⭐⭐⭐ Good
+                    option(value='3') ⭐⭐⭐ Average
+                    option(value='2') ⭐⭐ Poor
+                    option(value='1') ⭐ Terrible
+                .form__group
+                  textarea.form__input(name='review', placeholder='Write your review...', required)
+                .form__group.right
+                  button.btn.btn--green.btn--small(type='submit') Submit Review
+    else
+      p.text-muted.mt-sm You’ve submitted reviews for all your booked tours ✅
+
+    if reviews.length
+      .section-submitted.mt-md
+        h3.heading-tertirary.mb-xs Your Submitted Reviews
+        each r in reviews
+          .card.card--submitted
+            h4= r.tour.name
+            form.review-form(data-id=r._id)
+              .form__group
+                label.form__label(for='rating') Your Rating
+                select.form__input(name='rating')
+                  option(value='5', selected=r.rating==5) 5
+                  option(value='4', selected=r.rating==4) 4
+                  option(value='3', selected=r.rating==3) 3
+                  option(value='2', selected=r.rating==2) 2
+                  option(value='1', selected=r.rating==1) 1
+              .form__group
+                textarea.form__input(name='review')= r.review
+              .form__group.right
+                button.btn.btn--green.btn--small(type='submit') Update
+                button.btn.btn--red.btn--small(type='button', onclick=`deleteReview('${r._id}')`) Delete
+    else
+      p.text-muted.mt-sm You haven’t submitted any reviews yet.

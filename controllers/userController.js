@@ -96,16 +96,32 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.createUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not defined! Please use /signup instead'
+exports.createUser = catchAsync(async (req, res, next) => {
+  const { name, email, password, passwordConfirm, role } = req.body;
+
+  if (!['guide', 'lead-guide'].includes(role)) {
+    return next(new AppError('Role must be guide or lead-guide', 400));
+  }
+
+  await User.create({
+    name,
+    email,
+    password,
+    passwordConfirm,
+    role
   });
-};
+
+  res.redirect('/manage-users');
+});
+
+// userController.js
+exports.deleteUser = catchAsync(async (req, res, next) => {
+  await User.findByIdAndDelete(req.params.id);
+  res.redirect('/manage-users/list?type=guides&alert=deleted');
+});
 
 exports.getUser = factory.getOne(User);
 exports.getAllUsers = factory.getAll(User);
 
 // Do NOT update passwords with this!
 exports.updateUser = factory.updateOne(User);
-exports.deleteUser = factory.deleteOne(User);

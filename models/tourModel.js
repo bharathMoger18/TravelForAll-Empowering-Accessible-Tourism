@@ -109,6 +109,17 @@ const tourSchema = new mongoose.Schema(
         type: mongoose.Schema.ObjectId,
         ref: 'User'
       }
+    ],
+    tourLead: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
+      required: [true, 'A tour must have a lead guide']
+    },
+    tourGuides: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User'
+      }
     ]
   },
   {
@@ -168,7 +179,15 @@ tourSchema.pre(/^find/, function(next) {
   this.populate({
     path: 'guides',
     select: '-__v -passwordChangedAt'
-  });
+  })
+    .populate({
+      path: 'tourLead',
+      select: 'name email role'
+    })
+    .populate({
+      path: 'tourGuides',
+      select: 'name email role'
+    });
 
   next();
 });

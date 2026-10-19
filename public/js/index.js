@@ -5,19 +5,15 @@ import { login, logout } from './login';
 import { updateSettings } from './updateSettings';
 import { bookTour } from './stripe';
 import { showAlert } from './alerts';
-import { signup } from './signup'; // Keep import if needed
+import { signup } from './signup';
 
-// DOM ELEMENTS
 const mapBox = document.getElementById('map');
 const loginForm = document.querySelector('.form--login');
-// Remove this line to avoid duplication:
-// const signupForm = document.querySelector('.form--signup');
 const logOutBtn = document.querySelector('.nav__el--logout');
 const userDataForm = document.querySelector('.form-user-data');
 const userPasswordForm = document.querySelector('.form-user-password');
 const bookBtn = document.getElementById('book-tour');
 
-// DELEGATION
 if (mapBox) {
   const locations = JSON.parse(mapBox.dataset.locations);
   displayMap(locations);
@@ -31,8 +27,6 @@ if (loginForm)
     login(email, password);
   });
 
-// Remove signup form listener here
-
 if (logOutBtn) logOutBtn.addEventListener('click', logout);
 
 if (userDataForm)
@@ -42,7 +36,6 @@ if (userDataForm)
     form.append('name', document.getElementById('name').value);
     form.append('email', document.getElementById('email').value);
     form.append('photo', document.getElementById('photo').files[0]);
-
     updateSettings(form, 'data');
   });
 

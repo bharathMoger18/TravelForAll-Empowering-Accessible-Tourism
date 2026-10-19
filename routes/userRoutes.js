@@ -37,4 +37,12 @@ router
   .patch(userController.updateUser)
   .delete(userController.deleteUser);
 
+// In routes/userRoutes.js
+router.post(
+  '/admin/create-user',
+  authController.protect,
+  authController.restrictTo('admin'),
+  userController.createUser
+);
+
 module.exports = router;

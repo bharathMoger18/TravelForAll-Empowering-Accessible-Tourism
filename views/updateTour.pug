@@ -1,0 +1,31 @@
+extends base
+
+block content
+  if alert
+    .alert.alert--success= alert
+
+  .admin-panel
+    h1.heading-primary Update Tour
+
+    form.form(action='/api/v1/tours/update-tour', method='POST')
+      .form__group
+        label.form__label(for='tourId') Select a tour:
+        select.form__input(name='tourId', required)
+          option(value='') -- Select Tour --
+          each tour in tours
+            - const booked = tour.maxGroupSize - tour.remainingSeats;
+            option(value=tour._id)= `${tour.name} (Booked: ${booked}, Left: ${tour.remainingSeats})`
+
+      .form__group
+        label.form__label(for='maxGroupSize') Max Group Size:
+        input.form__input(type='number', name='maxGroupSize', min='1')
+
+      .form__group
+        label.form__label(for='price') Price ($):
+        input.form__input(type='number', name='price', min='0', step='0.01')
+
+      .form__group
+        label.form__label(for='duration') Duration (days):
+        input.form__input(type='number', name='duration', min='1')
+
+      button.btn.btn--green(type='submit') Update Tour

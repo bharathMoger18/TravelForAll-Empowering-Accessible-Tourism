@@ -1,0 +1,55 @@
+extends base
+
+block content
+  .admin-form-container
+    h2.heading-secondary Create a New Tour
+
+    form.form.form-create-tour(method='POST', action='/api/v1/tours', enctype='multipart/form-data')
+      .form__group
+        label.form__label(for='name') Name
+        input#name.form__input(type='text', name='name', required)
+
+      .form__group
+        label.form__label(for='duration') Duration (in days)
+        input#duration.form__input(type='number', name='duration', required)
+
+      .form__group
+        label.form__label(for='maxGroupSize') Max Group Size
+        input#maxGroupSize.form__input(type='number', name='maxGroupSize', required)
+
+      .form__group
+        label.form__label(for='difficulty') Difficulty
+        select#difficulty.form__input(name='difficulty', required)
+          option(value='easy') Easy
+          option(value='medium') Medium
+          option(value='difficult') Difficult
+
+      .form__group
+        label.form__label(for='price') Price
+        input#price.form__input(type='number', name='price', required)
+
+      .form__group
+        label.form__label(for='summary') Summary
+        input#summary.form__input(type='text', name='summary', required)
+
+      .form__group
+        label.form__label(for='description') Description
+        textarea#description.form__input(name='description')
+
+      .form__group
+        label.form__label(for='startLocation.description') Start Location Description
+        input#startLocationDescription.form__input(type='text', name='startLocation.description')
+
+      .form__group
+        label.form__label(for='startLocation.coordinates') Start Location Coordinates (lng,lat)
+        input#startLocationCoordinates.form__input(type='text', name='startLocation.coordinates', required)
+
+      .form__group
+        label.form__label(for='imageCover') Cover Image
+        input#imageCover.form__input(type='file', name='imageCover', required)
+
+      .form__group
+        label.form__label(for='images') Tour Images (up to 3)
+        input#images.form__input(type='file', name='images', multiple)
+
+      button.btn.btn--green(type='submit') Create Tour

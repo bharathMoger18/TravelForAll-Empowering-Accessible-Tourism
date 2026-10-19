@@ -1,0 +1,19 @@
+extends base
+
+block content
+  main.main
+    h2.heading-secondary.mb-md Manage All Reviews
+
+    if reviews.length
+      .section-grid
+        each review in reviews
+          .card.card--review
+            h4.card__title= review.tour && review.tour.name ? review.tour.name : 'Tour not found'
+            p By: #{review.user && review.user.name ? review.user.name : 'Deleted User'}
+            p Rating: #{review.rating} ⭐
+            p= review.review
+
+            form(method='POST', action=`/api/v1/reviews/${review._id}?_method=DELETE`)
+              button.btn.btn--red(type='submit') Delete Review
+    else
+      p.text-muted.mt-md No reviews found.

@@ -1,0 +1,21 @@
+extends base
+
+block content
+  main.main
+    if alert
+      .alert.alert--success= alert
+
+    .admin__panel
+      h1.heading-secondary.text-center Delete Tour
+
+      form.form.form--delete(action='/api/v1/tours/delete-tour', method='POST')
+        .form__group
+          label.form__label(for='tourId') Select a tour to delete:
+          select.form__input(name='tourId', required)
+            option(value='') -- Select Tour --
+            each tour in tours
+              - const booked = tour.maxGroupSize - tour.remainingSeats;
+              option(value=tour._id)= `${tour.name} (Booked: ${booked}, Left: ${tour.remainingSeats})`
+
+        .form__group.text-center
+          button.btn.btn--red(type='submit') Delete This Tour
