@@ -16,3 +16,34 @@ tmp/
 
 # Generated Parcel source map
 public/js/bundle.js.map
+
+# Dependencies and generated files
+node_modules/
+tmp/
+config.env
+.env
+.env.*
+
+# Dependencies, secrets, and generated files
+node_modules/
+tmp/
+config.env
+.env
+.env.*
+
+# Local cache and generated files
+.cache/
+node_modules/
+tmp/
+
+# Secrets
+config.env
+.env
+.env.*
+
+# User-uploaded images
+public/img/users/
+
+# Local user data
+/dev-data/data/users.json
+dev-data/data/users.json
